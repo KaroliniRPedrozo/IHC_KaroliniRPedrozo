@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engenharia de Usabilidade — LATAM Airlines — Karolini R. Pedrozo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --latam-blue: #0A0822;
+    --latam-indigo: #1B0088;
+    --latam-red: #800b2a;
+    --latam-red-light: #FFEBEE;
+    --bg-page: #F3F4F6;
+    --card-bg: #FFFFFF;
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --border-subtle: #E5E7EB;
+    
+    /* Severidades */
+    --sev-crit: #EF4444; /* Vermelho */
+    --sev-high: #F97316; /* Laranja */
+    --sev-med:  #EAB308; /* Amarelo */
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER PREMIUM ANIMADO (FLUIDO) ─────────────────────────────── */
+  .ux-header {
+    background: linear-gradient(
+      -45deg, 
+      var(--latam-blue), 
+      var(--latam-indigo), 
+      var(--latam-red), 
+      var(--latam-indigo), 
+      var(--latam-blue)
+    );
+    background-size: 300% 300%;
+    animation: gradientCycle 18s ease-in-out infinite;
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    border-bottom: 6px solid var(--latam-red);
+  }
+
+  @keyframes gradientCycle {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .ux-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FCA5A5;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .ux-header h1 {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .ux-header p {
+    font-size: 18px;
+    color: #D1D5DB;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .ux-meta {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .meta-col { display: flex; flex-direction: column; text-align: center; }
+  .meta-col span { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .meta-col strong { font-size: 14px; color: white; font-weight: 600; margin-top: 4px; }
+
+  /* ── LAYOUT BASE ─────────────────────────── */
+  .container { max-width: 960px; margin: -40px auto 60px; padding: 0 20px; position: relative; z-index: 10; }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 32px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--latam-indigo);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section-title .step {
+    background: var(--latam-red-light);
+    color: var(--latam-red);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-size: 16px;
+  }
+
+  /* ── PERSONA BENTO BOX ─────────────────────── */
+  .persona-bento {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    background: #F8FAFC;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .p-profile { text-align: center; padding-right: 24px; border-right: 1px dashed #CBD5E1; }
+  .p-avatar { font-size: 56px; margin-bottom: 12px; line-height: 1; }
+  .p-name { font-size: 20px; font-weight: 700; color: var(--latam-blue); }
+  .p-role { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 16px; }
+  .p-quote { font-size: 13px; font-style: italic; color: var(--latam-indigo); background: #E0E7FF; padding: 12px; border-radius: 12px; }
+
+  .p-details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .p-list h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+  .p-list ul { list-style: none; }
+  .p-list li { font-size: 13px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; }
+  .p-list.goals li::before { content: '🎯'; }
+  .p-list.pains li::before { content: '⚠️'; }
+
+  /* ── DIAGNÓSTICO (AUDIT CARDS) ────────────────── */
+  .audit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+  .audit-card {
+    background: white; border: 1px solid var(--border-subtle);
+    border-radius: 16px; padding: 24px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  
+  .audit-card:hover { border-color: var(--latam-indigo); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); transform: translateY(-2px); }
+
+  .audit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .audit-id { font-size: 14px; font-weight: 800; color: var(--latam-indigo); background: var(--bg-page); padding: 4px 10px; border-radius: 6px; }
+  
+  .severity { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  
+  .sev-high { background: #FEE2E2; color: #B91C1C; }
+  .sev-high .dot { background: #EF4444; box-shadow: 0 0 0 3px #FCA5A5; }
+  
+  .sev-med { background: #FFEDD5; color: #C2410C; }
+  .sev-med .dot { background: #F97316; box-shadow: 0 0 0 3px #FDBA74; }
+
+  .audit-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+  .audit-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .audit-heu { display: inline-block; font-size: 11px; font-weight: 600; color: var(--latam-red); background: var(--latam-red-light); padding: 4px 8px; border-radius: 6px; }
+
+  /* ── EVIDÊNCIAS (BROWSER MOCKUP) ──────────────── */
+  .evidence-item { margin-bottom: 48px; }
+  
+  .browser-mockup {
+    background: white; border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    overflow: hidden; margin-bottom: 16px;
+  }
+  
+  .browser-header {
+    background: #F1F5F9; padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  
+  .browser-dots { display: flex; gap: 6px; }
+  .browser-dots span { width: 10px; height: 10px; border-radius: 50%; background: #CBD5E1; }
+  .browser-dots span:nth-child(1) { background: #FF5F56; }
+  .browser-dots span:nth-child(2) { background: #FFBD2E; }
+  .browser-dots span:nth-child(3) { background: #27C93F; }
+  
+  .browser-url { background: white; border-radius: 6px; font-size: 11px; color: #9CA3AF; padding: 4px 12px; flex-grow: 1; text-align: center; margin-left: 16px; font-family: monospace; }
+  
+  .browser-mockup img { width: 100%; display: block; }
+
+  .evidence-desc { display: flex; gap: 16px; background: #F8FAFC; padding: 20px; border-radius: 12px; border-left: 4px solid var(--latam-red); }
+  .evidence-desc strong { color: var(--latam-blue); font-size: 15px; display: block; margin-bottom: 4px; }
+  .evidence-desc p { font-size: 13.5px; margin: 0; }
+
+  /* ── SOLUÇÕES CICLO 2 (NOVOS ESTILOS) ──────────────── */
+  .solution-grid { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+  .solution-card { background: #F8FAFC; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; border-left: 4px solid #10B981; }
+  .solution-card h4 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 16px; color: var(--latam-indigo); margin-bottom: 10px; }
+  .solution-card p { font-size: 14.5px; color: var(--text-muted); margin-bottom: 0; line-height: 1.5; }
+  .solution-card strong { color: var(--text-main); }
+  .solution-tag { background: #D1FAE5; color: #065F46; font-size: 11px; padding: 4px 10px; border-radius: 100px; font-weight: 700; white-space: nowrap; }
+
+  /* ── NEXT STEPS / CTA PROTÓTIPO ──────────────── */
+  .cta-card {
+    background: var(--latam-indigo);
+    background-image: linear-gradient(135deg, #1b0088 0%, #0a0822 100%);
+    border-radius: 24px; padding: 40px; color: white;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 20px 25px -5px rgba(27, 0, 136, 0.3);
+  }
+
+  .cta-content h2 { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+  .cta-content p { font-size: 15px; color: #A5B4FC; margin-bottom: 24px; max-width: 500px; }
+  
+  .cta-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+  
+  .btn-primary { 
+    display: inline-flex; align-items: center; gap: 8px; 
+    background: var(--latam-red); color: white; 
+    padding: 14px 28px; border-radius: 12px; 
+    text-decoration: none; font-weight: 700; font-size: 15px; 
+    transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(128, 11, 42, 0.2); 
+    border: 2px solid transparent;
+  }
+  .btn-primary:hover { background: #5a071c; transform: translateY(-2px); }
+  
+  .btn-outline { 
+    color: white; text-decoration: none; font-size: 14px; font-weight: 600; 
+    padding: 12px 24px; border-radius: 12px; 
+    border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s ease; 
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+  @media (max-width: 768px) {
+    .cta-card { flex-direction: column; text-align: center; }
+    .cta-card .icon-lg { display: none; }
+    .cta-actions { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<header class="ux-header">
+  <span class="ux-tag">Avaliação Heurística • Ciclos 1 e 2</span>
+  <h1>Engenharia de Usabilidade</h1>
+  <p>Diagnóstico de usabilidade e redesign do fluxo de Viagem Personalizada e seleção de serviços extras.</p>
+  
+  <div class="ux-meta">
+    <div class="meta-col"><span>Consultora UX / Dev</span><strong>Karolini R. Pedrozo</strong></div>
+    <div class="meta-col"><span>Sistema</span><strong>LATAM Web Desktop</strong></div>
+    <div class="meta-col"><span>Professor</span><strong>Matheus Cataneo</strong></div>
+    <div class="meta-col"><span>Escopo</span><strong>Fluxo de Bagagem</strong></div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="card">
+    <h2 class="section-title"><span class="step">01</span> Contexto e Usuário Alvo</h2>
+    <p style="margin-bottom: 24px;">O foco desta análise é a etapa de <strong>Adição de Bagagem e Resumo de Compra</strong>. Esta interface foi selecionada por apresentar altíssima densidade informacional, gerando fricção cognitiva e induzindo o utilizador a decisões financeiras acidentais.</p>
+    
+    <div class="persona-bento">
+      <div class="p-profile">
+        <div class="p-avatar">👨‍💼</div>
+        <div class="p-name">Roberto Alves</div>
+        <div class="p-role">Viajante Ocasional • 55 anos</div>
+        <div class="p-quote">"Quero adicionar a minha mala sem medo de clicar na opção errada e pagar a dobrar."</div>
+      </div>
+      <div class="p-details">
+        <div class="p-list goals">
+          <h5>Objetivos no Sistema</h5>
+          <ul>
+            <li>Comprar a passagem de forma direta.</li>
+            <li>Entender claramente o que está incluído.</li>
+            <li>Adicionar apenas 1 mala despachada.</li>
+          </ul>
+        </div>
+        <div class="p-list pains">
+          <h5>Dores e Frustrações</h5>
+          <ul>
+            <li>Excesso de textos com regras (cm/kg).</li>
+            <li>Medo de taxas ocultas ou automáticas.</li>
+            <li>Perda de memória sobre o que já selecionou ao mudar de página.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="step">02</span> Mapeamento de Problemas</h2>
+    
+    <div class="audit-grid">
+      <div class="audit-card">
+        <div class="audit-header">
+          <span class="audit-id">P1</span>
+          <span class="severity sev-med"><span class="dot"></span> Alto (3/5)</span>
+        </div>
+        <h4>Sobrecarga Cognitiva</h4>
+        <p>Regras de dimensões de bagagem apresentadas em blocos de texto denso, exigindo leitura extensa em vez de leitura dinâmica.</p>
+        <span class="audit-heu">H8 — Estética e Minimalismo</span>
+      </div>
+
+      <div class="audit-card" style="border-color: #FECACA; background: #FEF2F2;">
+        <div class="audit-header">
+          <span class="audit-id">P2</span>
+          <span class="severity sev-high"><span class="dot"></span> Severo (4/5)</span>
+        </div>
+        <h4>Risco de Cobrança Dupla</h4>
+        <p>O switch "Adicionar em todos os voos" não previne o erro, ocultando a multiplicação imediata do custo na UI principal.</p>
+        <span class="audit-heu">H5 — Prevenção de Erros</span>
+      </div>
+
+      <div class="audit-card">
+        <div class="audit-header">
+          <span class="audit-id">P3</span>
+          <span class="severity sev-med"><span class="dot"></span> Alto (3/5)</span>
+        </div>
+        <h4>Falta de Visibilidade</h4>
+        <p>O carrinho ("Detalhe de viagem") minimiza-se sozinho ao avançar nas abas, forçando o utilizador a memorizar as escolhas.</p>
+        <span class="audit-heu">H6 — Reconhecimento vs Memória</span>
+      </div>
+
+      <div class="audit-card">
+        <div class="audit-header">
+          <span class="audit-id">P4</span>
+          <span class="severity sev-med"><span class="dot"></span> Médio (2/5)</span>
+        </div>
+        <h4>Validação Genérica</h4>
+        <p>Mensagens de erro no formulário não são instrutivas. Apontam o erro, mas não sugerem como recuperar (ex: falta de ponto no email).</p>
+        <span class="audit-heu">H9 — Recuperação de Erros</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="step">03</span> Evidências da Interface Original</h2>
+    
+    <div class="evidence-item">
+      <div class="browser-mockup">
+        <div class="browser-header">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">latamairlines.com/compra/viagem-personalizada</div>
+        </div>
+        <img src="https://i.postimg.cc/RVv2gKJv/captura-bagagem.png" alt="Tela de Bagagem">
+      </div>
+      <div class="evidence-desc">
+        <div>
+          <strong>Evidência P1 e P2: Excesso de texto e Toggle confuso</strong>
+          <p>O layout central agrupa informações demais num único card. O utilizador é forçado a ler parágrafos cinzentos para entender o serviço. O botão superior (Switch) possui um impacto financeiro direto que não se reflete imediatamente perto do botão de ação da mala.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-item">
+      <div class="browser-mockup">
+        <div class="browser-header">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">latamairlines.com/compra/servicos-extras</div>
+        </div>
+        <img src="https://i.postimg.cc/dtJg5rZ0/captura-resumo.png" alt="Tela de Resumo">
+      </div>
+      <div class="evidence-desc">
+        <div>
+          <strong>Evidência P3: Carrinho lateral sem estado</strong>
+          <p>Ao abrir a aba de "Embarque premium", o sistema colapsa as seleções da aba anterior no painel direito. O utilizador que acabou de adicionar R$ 685,66 em bagagens já não vê essa informação visível, exigindo esforço de memória de curto prazo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-item">
+      <div class="browser-mockup">
+        <div class="browser-header">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">latamairlines.com/compra/passageiros</div>
+        </div>
+        <img src="https://i.postimg.cc/9FcsLZwM/captura-formulario.png" alt="Formulário">
+      </div>
+      <div class="evidence-desc">
+        <div>
+          <strong>Evidência P4: Feedback de Erro Pobre</strong>
+          <p>Erro no e-mail (falta de um simples ponto antes de 'com') gera um feedback em vermelho dizendo apenas "Insira um email válido", não auxiliando na rápida correção por parte do utilizador.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="step">04</span> Ciclo 2: Proposta de Melhoria</h2>
+    <p>O objetivo deste segundo ciclo foi atuar diretamente no diagnóstico levantado, redesenhando a interface de seleção de bagagens e preenchimento de dados da LATAM Airlines. O foco foi <strong>reduzir a sobrecarga cognitiva da persona (Roberto)</strong>, eliminar elementos de distração e garantir que o sistema atue preventivamente contra erros, fornecendo um fluxo claro e com visibilidade constante do status da compra.</p>
+
+    <div class="solution-grid">
+      <div class="solution-card">
+        <h4>Componentização Visual em Cards <span class="solution-tag">H8 • Estética e Minimalismo</span></h4>
+        <p><strong>O que mudou:</strong> O bloco denso de texto e caixas de seleção confusas foram substituídos por Cards independentes e interativos. O botão agora alterna dinamicamente o estado entre "Adicionar" e "Remover".<br>
+        <strong>Justificativa:</strong> Reduz o tempo de decisão aplicando a Lei de Hick e garante o <strong>Controle e Liberdade do Usuário (H3)</strong> ao permitir desfazer a ação intuitivamente.</p>
+      </div>
+
+      <div class="solution-card">
+        <h4>Carrinho Lateral Persistente (Sticky) <span class="solution-tag">H6 • Reconhecimento em vez de Recordação</span></h4>
+        <p><strong>O que mudou:</strong> Implementação de um painel fixo que acompanha a rolagem, exibindo em tempo real o resumo de itens selecionados e atualizando o valor total instantaneamente.<br>
+        <strong>Justificativa:</strong> Resolve o P3 da interface original. O usuário não precisa memorizar escolhas passadas, garantindo total <strong>Visibilidade do Status do Sistema (H1)</strong>.</p>
+      </div>
+
+      <div class="solution-card">
+        <h4>Validação Construtiva em Tempo Real <span class="solution-tag">H5 • Prevenção de Erros</span></h4>
+        <p><strong>O que mudou:</strong> O campo de e-mail agora valida o formato via RegEx enquanto o usuário digita. O sistema altera o feedback visual (de aviso amigável para borda verde de sucesso) ativamente.<br>
+        <strong>Justificativa:</strong> Ao invés de uma mensagem genérica tardia, o sistema atua guiando a recuperação de erro de forma construtiva <strong>(H9)</strong>.</p>
+      </div>
+      
+      <div class="solution-card">
+        <h4>Modal de Confirmação (Fechamento do Fluxo) <span class="solution-tag">H2 • Correspondência com o Mundo Real</span></h4>
+        <p><strong>O que mudou:</strong> Adição de um modal simulando um bilhete de embarque após o preenchimento correto dos dados de contato, exibindo o resumo consolidado antes do pagamento.<br>
+        <strong>Justificativa:</strong> Traz confiança e segurança para a persona concluir a tarefa, atestando de forma clara que as preferências foram salvas corretamente <strong>(H1)</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-card">
+    <div class="cta-content">
+      <h2>Protótipo de Alta Fidelidade</h2>
+      <p>Acesse o resultado final do Ciclo 2. Um protótipo interativo desenvolvido com HTML, CSS e JavaScript, aplicando na prática as heurísticas e correções documentadas.</p>
+      
+      <div class="cta-actions">
+        <a href="https://karolinirpedrozo.github.io/Engenharia_de_Usabilidade_Prototipo/" target="_blank" class="btn-primary">🚀 Acessar Protótipo Funcional</a>
+        <a href="https://github.com/KaroliniRPedrozo/Engenharia_de_Usabilidade_Prototipo" target="_blank" class="btn-outline">Ver Código no GitHub</a>
+      </div>
+    </div>
+    <div class="icon-lg" style="font-size: 80px;">💻</div>
+  </section>
+
+</main>
+
+</body>
+</html>
